@@ -25,11 +25,11 @@ npx hardhat node --port 8546
 3. Deploy Contracts
 Open a new terminal window to deploy the MessageBridge contracts to both chains.
 
-# Deploy to Chain A
+Deploy to Chain A
 cd ~/simple-bridge/chainA
 npx hardhat run scripts/deploy.js --network localhost
 
-# Deploy to Chain B
+Deploy to Chain B
 cd ~/simple-bridge/chainB
 npx hardhat run scripts/deploy.js --network localhost
 
@@ -42,10 +42,10 @@ npx hardhat run relyer.js
 5. Test the Bridge
 Open another terminal window and run the test scripts to send messages across the bridge.
 
-# Send a message from Chain A
+Send a message from Chain A
 cd ~/simple-bridge/chainA
 npx hardhat run scripts/test.js --network localhost
 
-# Send a message from Chain B
+Send a message from Chain B
 cd ~/simple-bridge/chainB
 npx hardhat run scripts/test.js --network localhost
