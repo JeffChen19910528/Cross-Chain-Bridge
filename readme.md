@@ -2,15 +2,15 @@
 
 First, navigate to the project root and install all necessary modules.  
 
-cd ~/simple-bridge  
+cd ~/Cross-Chain-Bridge  
 
 npm install  
 
-cd ~/simple-bridge/chainA  
+cd ~/Cross-Chain-Bridge/chainA  
 
 npm install  
 
-cd ~/simple-bridge/chainB  
+cd ~/Cross-Chain-Bridge/chainB  
 
 npm install  
 
@@ -21,14 +21,14 @@ Open two separate terminal windows to run the Hardhat nodes for Chain A and Chai
 
 Terminal 1 (Chain A)  
 
-cd ~/simple-bridge/chainA  
+cd ~/Cross-Chain-Bridge/chainA  
 
 npx hardhat node  
 
 
 Terminal 2 (Chain B)  
 
-cd ~/simple-bridge/chainB  
+cd ~/Cross-Chain-Bridge/chainB  
 
 npx hardhat node --port 8546  
 
@@ -40,14 +40,14 @@ Open a new terminal window to deploy the MessageBridge contracts to both chains.
 
 Deploy to Chain A  
 
-cd ~/simple-bridge/chainA  
+cd ~/Cross-Chain-Bridge/chainA  
 
 npx hardhat run scripts/deploy.js --network localhost  
 
 
 Deploy to Chain B  
 
-cd ~/simple-bridge/chainB  
+cd ~/Cross-Chain-Bridge/chainB  
 
 npx hardhat run scripts/deploy.js --network localhost  
 
@@ -57,7 +57,7 @@ npx hardhat run scripts/deploy.js --network localhost
 Start the relayer script, which listens for events on both chains and relays messages.  
 
 
-cd ~/simple-bridge  
+cd ~/Cross-Chain-Bridge   
 
 npx hardhat run relyer.js  
 
@@ -69,13 +69,13 @@ Open another terminal window and run the test scripts to send messages across th
 
 Send a message from Chain A:  
 
-cd ~/simple-bridge/chainA  
+cd ~/Cross-Chain-Bridge/chainA  
 
 npx hardhat run scripts/test.js --network localhost  
 
 
 Send a message from Chain B:  
 
-cd ~/simple-bridge/chainB  
+cd ~/Cross-Chain-Bridge/chainB  
 
 npx hardhat run scripts/test.js --network localhost  

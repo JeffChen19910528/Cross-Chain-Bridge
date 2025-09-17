@@ -2,31 +2,42 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 contract MessageBridge is Ownable {
-    constructor(address initialOwner) Ownable(initialOwner) {}
-    // 定義一個事件來記錄發送的訊息
-    event MessageSent(bytes32 indexed messageId, string message);
-
-    // 定義一個事件來記錄收到的訊息
-    event MessageReceived(bytes32 indexed messageId, string message);
-
-    // 存放已處理過的訊息 ID，防止重複處理
     mapping(bytes32 => bool) public processedMessages;
 
-    // 傳送訊息的函式
-    function sendMessage(string memory _message) external {
-        // 為了簡單，我們用訊息內容的雜湊值作為 ID
-        bytes32 messageId = keccak256(abi.encodePacked(_message));
-        emit MessageSent(messageId, _message);
+    event MessageSent(bytes32 indexed messageId, string message, bytes32 messageHash);
+    event MessageReceived(bytes32 indexed messageId, string message);
+
+    address public otherBridge;
+
+    constructor(address _otherBridge) Ownable(msg.sender) {
+        otherBridge = _otherBridge;
     }
 
-    // 接收訊息的函式（只能由中繼者呼叫）
-    function receiveMessage(bytes32 _messageId, string memory _message) external onlyOwner {
-        // 檢查訊息是否已經處理過
-        require(!processedMessages[_messageId], "Message already processed");
+    // 發送訊息，並同時計算哈希值
+    function sendMessage(string memory message) public {
+        bytes32 messageId = keccak256(abi.encodePacked(block.timestamp, msg.sender, message));
+        bytes32 messageHash = keccak256(abi.encodePacked(message));
+        
+        emit MessageSent(messageId, message, messageHash);
+    }
 
-        processedMessages[_messageId] = true;
-        emit MessageReceived(_messageId, _message);
+    // 接收訊息，並驗證哈希值是否匹配
+    function receiveMessage(bytes32 messageId, string memory message, bytes32 messageHash) public {
+        require(msg.sender == otherBridge, "Unauthorized caller");
+        require(!processedMessages[messageId], "Message already processed");
+        
+        // 驗證哈希值，確保訊息未被篡改
+        bytes32 calculatedHash = keccak256(abi.encodePacked(message));
+        require(calculatedHash == messageHash, "Message hash mismatch");
+
+        processedMessages[messageId] = true;
+        emit MessageReceived(messageId, message);
+    }
+
+    function setOtherBridge(address _otherBridge) public onlyOwner {
+        otherBridge = _otherBridge;
     }
 }

@@ -36,14 +36,17 @@ async function main() {
   console.log("Relayer is listening for messages...");
 
   // 監聽 Chain A 的事件並中繼到 Chain B
-  bridgeA_read.on("MessageSent", async (messageId, message, sender, timestamp) => {
+  // 新增了 messageHash 參數
+  bridgeA_read.on("MessageSent", async (messageId, message, messageHash) => {
     console.log("\nRelayer caught a message on Chain A!");
     console.log(`Message ID: ${messageId}`);
     console.log(`Message: ${message}`);
+    console.log(`Message Hash: ${messageHash}`); // 新增: 顯示哈希值
     console.log(`Relaying message to Chain B...`);
 
     try {
-      const tx = await bridgeB_write.receiveMessage(messageId, message);
+      // 在呼叫 receiveMessage 時，同時傳送 message 和 messageHash
+      const tx = await bridgeB_write.receiveMessage(messageId, message, messageHash);
       await tx.wait(); // 等待交易確認
       console.log("Message successfully relayed to Chain B!");
     } catch (error) {
@@ -52,14 +55,17 @@ async function main() {
   });
 
   // 監聽 Chain B 的事件並中繼到 Chain A
-  bridgeB_read.on("MessageSent", async (messageId, message, sender, timestamp) => {
+  // 新增了 messageHash 參數
+  bridgeB_read.on("MessageSent", async (messageId, message, messageHash) => {
     console.log("\nRelayer caught a message on Chain B!");
     console.log(`Message ID: ${messageId}`);
     console.log(`Message: ${message}`);
+    console.log(`Message Hash: ${messageHash}`); // 新增: 顯示哈希值
     console.log(`Relaying message to Chain A...`);
 
     try {
-      const tx = await bridgeA_write.receiveMessage(messageId, message);
+      // 在呼叫 receiveMessage 時，同時傳送 message 和 messageHash
+      const tx = await bridgeA_write.receiveMessage(messageId, message, messageHash);
       await tx.wait(); // 等待交易確認
       console.log("Message successfully relayed to Chain A!");
     } catch (error) {
