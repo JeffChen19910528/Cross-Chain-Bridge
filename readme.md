@@ -1,81 +1,68 @@
-1. Install Dependencies  
+🚀 Cross-Chain Bridge 啟動與測試流程
 
-First, navigate to the project root and install all necessary modules.  
+以下說明如何在本地環境啟動 Chain A / Chain B，部署合約，啟動 Relayer，並測試跨鏈訊息傳遞。
 
-cd ~/Cross-Chain-Bridge  
+1️⃣ Install Dependencies
 
-npm install  
+首先進入專案根目錄與各子專案，安裝所需套件。
 
-cd ~/Cross-Chain-Bridge/chainA  
+cd ~/Cross-Chain-Bridge
+npm install
 
-npm install  
+cd ~/Cross-Chain-Bridge/chainA
+npm install
 
-cd ~/Cross-Chain-Bridge/chainB  
+cd ~/Cross-Chain-Bridge/chainB
+npm install
 
-npm install  
+2️⃣ Start Hardhat Nodes
 
---------------------------------------------------------------------------------------
-2. Start Hardhat Nodes  
+請開啟 兩個獨立的 Terminal 視窗，分別啟動 Chain A 與 Chain B 的本地節點。
 
-Open two separate terminal windows to run the Hardhat nodes for Chain A and Chain B.  
-
-Terminal 1 (Chain A)  
-
-cd ~/Cross-Chain-Bridge/chainA  
-
-npx hardhat node  
+🟢 Terminal 1：Chain A
+cd ~/Cross-Chain-Bridge/chainA
+npx hardhat node
 
 
-Terminal 2 (Chain B)  
+預設使用 http://127.0.0.1:8545
 
-cd ~/Cross-Chain-Bridge/chainB  
-
-npx hardhat node --port 8546  
-
---------------------------------------------------------------------------------------
-3. Deploy Contracts  
-
-Open a new terminal window to deploy the MessageBridge contracts to both chains.  
+🔵 Terminal 2：Chain B
+cd ~/Cross-Chain-Bridge/chainB
+npx hardhat node --port 8546
 
 
-Deploy to Chain A  
+使用不同的 Port 以模擬第二條區塊鏈
 
-cd ~/Cross-Chain-Bridge/chainA  
+3️⃣ Deploy Contracts
 
-npx hardhat run scripts/deploy.js --network localhost  
+請再開一個新的 Terminal，將 MessageBridge 合約部署到兩條鏈上。
 
+📦 Deploy to Chain A
+cd ~/Cross-Chain-Bridge/chainA
+npx hardhat run scripts/deploy.js --network localhost
 
-Deploy to Chain B  
+📦 Deploy to Chain B
+cd ~/Cross-Chain-Bridge/chainB
+npx hardhat run scripts/deploy.js --network localhost
 
-cd ~/Cross-Chain-Bridge/chainB  
+4️⃣ Run the Relayer
 
-npx hardhat run scripts/deploy.js --network localhost  
+Relayer 會監聽兩條鏈的事件，並負責轉送跨鏈訊息。
 
---------------------------------------------------------------------------------------  
-4. Run the Relayer  
-
-Start the relayer script, which listens for events on both chains and relays messages.  
-
-
-cd ~/Cross-Chain-Bridge   
-
-npx hardhat run relyer.js  
-
---------------------------------------------------------------------------------------
-5. Test the Bridge  
-
-Open another terminal window and run the test scripts to send messages across the bridge.  
+cd ~/Cross-Chain-Bridge
+npx hardhat run relayer.js
 
 
-Send a message from Chain A:  
+📌 請確保 Chain A 與 Chain B 的節點都已正常啟動
 
-cd ~/Cross-Chain-Bridge/chainA  
+5️⃣ Test the Bridge
 
-npx hardhat run scripts/test.js --network localhost  
+最後，開啟新的 Terminal 視窗，執行測試腳本以驗證跨鏈功能。
 
+🔁 Send Message from Chain A → Chain B
+cd ~/Cross-Chain-Bridge/chainA
+npx hardhat run scripts/test.js --network localhost
 
-Send a message from Chain B:  
-
-cd ~/Cross-Chain-Bridge/chainB  
-
-npx hardhat run scripts/test.js --network localhost  
+🔁 Send Message from Chain B → Chain A
+cd ~/Cross-Chain-Bridge/chainB
+npx hardhat run scripts/test.js --network localhost
