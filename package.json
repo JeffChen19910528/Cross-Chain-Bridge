@@ -1,18 +1,23 @@
 {
-  "name": "simple-bridge",
+  "name": "cross-chain-bridge",
   "version": "1.0.0",
-  "description": "1. start node: cd ~/simple-bridge/chainA && npx hardhat node cd ~/simple-bridge/chainB && npx hardhat node --port 8546 2. Deployment Program: cd ~/simple-bridge/chainA && npx hardhat run scripts/deploy.js --network localhost cd ~/simple-bridge/chainB && npx hardhat run scripts/deploy.js --network localhost 3. run delayer: cd ~/simple-bridge && npx hardhat run relyer.js",
-  "main": "relyer.js",
+  "description": "A minimal cross-chain message bridge: two local Hardhat chains plus a relayer that forwards MessageSent events between them.",
+  "main": "relayer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "relayer": "node relayer.js",
+    "test": "echo \"No automated tests yet — see readme.md for the manual test flow.\" && exit 0"
   },
-  "keywords": [],
+  "keywords": [
+    "blockchain",
+    "cross-chain",
+    "bridge",
+    "hardhat",
+    "ethers"
+  ],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.2.3",
-    "@openzeppelin/contracts": "^5.4.0",
-    "ethers": "^5.8.0",
-    "hardhat": "^2.26.3"
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "ethers": "^5.8.0"
   }
 }

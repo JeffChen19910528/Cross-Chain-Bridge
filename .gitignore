@@ -1,0 +1,14 @@
+node_modules/
+artifacts/
+cache/
+coverage/
+typechain/
+typechain-types/
+
+.env
+*.log
+npm-debug.log*
+
+# Generated on each deploy — not source of truth.
+chainA/bridge_addresses.json
+chainB/bridge_addresses.json
